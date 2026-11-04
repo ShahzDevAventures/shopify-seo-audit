@@ -24,7 +24,7 @@ From GSC Performance, plus one third-party tool if available (Semrush, Ahrefs or
 
 ## 5-step SERP read (per target keyword)
 1. Search it, logged out.
-2. Note the dominant intent and the SERP features present (shopping carousel, People Also Ask, AI overview, video).
+2. Note the dominant intent and the SERP features present (shopping carousel, People Also Ask, AI Overview, video).
 3. Note which page types rank, and whether they're big brands or small stores.
 4. Find what the top 3–5 share: copy length, format, headings, imagery, exact vs semantic match.
 5. Find the gap to fill.
@@ -51,6 +51,6 @@ In GSC, filter Position 11–20, sort by impressions. Put each query into one ca
 ## Authority (off-page, light)
 - **Good links:** relevant industry, authoritative site, editorial context, natural varied anchors, links to deep pages (PDPs, collections).
 - **Bad links:** spammy or irrelevant sites, link networks, repeated exact-match anchors, sudden spikes, link-exchange rings.
-- **Free competitor research:** `link:competitor.com`, `"competitor brand" "source"`, `site:competitor.com inurl:blog`. Note which content gets cited, by whom, and why.
+- **Free competitor research:** `"competitor brand" "source"`, `site:competitor.com inurl:blog`. Note which content gets cited, by whom, and why. Google no longer supports the `link:` operator; competitor link lists need a backlink tool.
 - **Link-worthy assets:** "[topic] statistics" pages built from original data, reference charts and glossaries, finders and calculators, comparison visuals.
 - **Promotion:** relevant bloggers and publications, guest posts and podcasts, journalist-source requests, a few partnerships with non-competitors.

@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Fill-in: replace example-store.com with the store's domain. -->
+<title>SEO audit for example-store.com</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;550;650;700&display=swap" rel="stylesheet">
+<style>
+/* Report styles modelled on Shopify Polaris (admin look): Inter, white cards on
+   a light grey page, 12px radius, Polaris tone colours for badges and banners.
+   Copy this block unchanged into the report's <style>. Do not add colours. */
+:root {
+  --bg: #f1f1f1;
+  --surface: #ffffff;
+  --surface-2: #f7f7f7;
+  --surface-3: #f3f3f3;
+  --text: #303030;
+  --text-2: #616161;
+  --text-3: #8a8a8a;
+  --border: #e3e3e3;
+  --border-2: #ebebeb;
+  --fill: #303030;
+  --link: #005bd3;
+  --ok-bg: #affebf;   --ok-tx: #014b40;
+  --bad-bg: #fedad9;  --bad-tx: #8e0b21;
+  --warn-bg: #ffd6a4; --warn-tx: #5e4200;
+  --att-bg: #ffef9d;  --att-tx: #4f4700;
+  --info-bg: #e0f0ff; --info-tx: #00527c;
+  --mute-bg: #e3e3e3; --mute-tx: #616161;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 0 0 rgba(26,26,26,.07), inset 0 0 0 1px rgba(0,0,0,.08);
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 450 14px/20px var(--font); }
+.page { max-width: 998px; margin: 0 auto; padding: 24px 16px 64px; }
+.page-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+.page-head h1 { font-size: 20px; line-height: 24px; font-weight: 700; margin: 0 0 4px; }
+.page-head .sub { color: var(--text-2); margin: 0; }
+h2 { font-size: 14px; line-height: 20px; font-weight: 650; margin: 0 0 12px; }
+h3 { font-size: 14px; line-height: 20px; font-weight: 650; margin: 0; }
+p { margin: 0 0 12px; max-width: 72ch; }
+p:last-child { margin-bottom: 0; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font: 500 12.5px/18px ui-monospace, "SF Mono", Menlo, monospace; background: var(--surface-3); padding: 1px 5px; border-radius: 6px; }
+.card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 16px; }
+.card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; }
+.card-head h2, .card-head h3 { margin: 0; }
+.muted { color: var(--text-2); }
+.small { font-size: 12px; line-height: 16px; }
+
+/* badges */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: var(--radius-sm); font-size: 12px; line-height: 16px; font-weight: 550; white-space: nowrap; background: var(--mute-bg); color: var(--mute-tx); }
+.badge.ok { background: var(--ok-bg); color: var(--ok-tx); }
+.badge.bad { background: var(--bad-bg); color: var(--bad-tx); }
+.badge.warn { background: var(--warn-bg); color: var(--warn-tx); }
+.badge.att { background: var(--att-bg); color: var(--att-tx); }
+.badge.info { background: var(--info-bg); color: var(--info-tx); }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* summary numbers */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+.stat { background: var(--surface-2); border-radius: var(--radius-sm); padding: 12px; }
+.stat .n { font-size: 24px; line-height: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat .l { color: var(--text-2); font-size: 12px; line-height: 16px; }
+
+/* banners */
+.banner { border-radius: var(--radius); padding: 12px 16px; margin-bottom: 16px; background: var(--info-bg); color: var(--info-tx); }
+.banner.bad { background: var(--bad-bg); color: var(--bad-tx); }
+.banner.warn { background: var(--warn-bg); color: var(--warn-tx); }
+.banner.ok { background: var(--ok-bg); color: var(--ok-tx); }
+.banner strong { font-weight: 650; }
+
+/* tables (Polaris IndexTable look) */
+.table-wrap { overflow-x: auto; margin: 0 -16px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 20px; }
+th { text-align: left; font-weight: 550; color: var(--text-2); background: var(--surface-2); padding: 8px 16px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { padding: 10px 16px; border-bottom: 1px solid var(--border-2); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* definition rows inside a card */
+.rows { display: grid; grid-template-columns: 180px 1fr; gap: 0; border-top: 1px solid var(--border-2); }
+.rows > dt, .rows > dd { margin: 0; padding: 10px 0; border-bottom: 1px solid var(--border-2); }
+.rows > dt { color: var(--text-2); padding-right: 16px; }
+.rows > dd:last-of-type, .rows > dt:last-of-type { border-bottom: none; }
+
+/* steps and checklists */
+ol.steps { margin: 0; padding-left: 20px; }
+ol.steps li { margin-bottom: 8px; padding-left: 4px; }
+ul.check { list-style: none; margin: 0; padding: 0; }
+ul.check li { display: grid; grid-template-columns: 20px 1fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border-2); }
+ul.check li:last-child { border-bottom: none; }
+ul.check li::before { content: ""; width: 16px; height: 16px; margin-top: 2px; border: 1.5px solid var(--text-3); border-radius: 4px; }
+.expect { color: var(--text-2); }
+
+/* split fix lists */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.split .card { margin-bottom: 0; }
+
+/* collapsible developer detail */
+details { border-top: 1px solid var(--border-2); margin-top: 12px; padding-top: 12px; }
+summary { cursor: pointer; font-weight: 550; }
+details[open] summary { margin-bottom: 8px; }
+
+.foot { color: var(--text-3); font-size: 12px; line-height: 16px; margin-top: 24px; }
+
+@media (max-width: 640px) {
+  .split { grid-template-columns: 1fr; }
+  .rows { grid-template-columns: 1fr; }
+  .rows > dt { padding-bottom: 0; border-bottom: none; }
+}
+@media print {
+  body { background: #fff; }
+  .card { box-shadow: none; border: 1px solid var(--border); break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<!--
+  Report template for the shopify-seo-audit skill.
+  Everything below is a made-up example for example-store.com. Replace all of it with the real audit.
+  Keep the <style> block above exactly as it is. Use only the classes it defines. No images, no scripts.
+  Sections stay in this order: Summary, Fix now, Keyword map, Striking distance, Findings by page type,
+  Technical appendix, Reports to request.
+-->
+<div class="page">
+
+  <div class="page-head">
+    <div>
+      <h1>SEO audit for example-store.com</h1>
+      <p class="sub">4 November 2026. Public storefront crawl plus a Search Console export (last 3 months).</p>
+    </div>
+    <div class="badges">
+      <span class="badge info">Read-only</span>
+    </div>
+  </div>
+
+  <div class="banner">
+    <strong>What this audit did.</strong> It read public pages of the store, the way a search engine does. It did not log in, fill in forms, add anything to a cart or change any setting.
+  </div>
+  <!--
+    If no Search Console export was provided, add this banner instead of (or under) the one above:
+    <div class="banner warn"><strong>Storefront-only audit.</strong> No Search Console export was provided, so the keyword baseline, striking-distance queries and click data are not checked. The exports to request are listed at the end.</div>
+  -->
+
+  <!-- 1. Summary: three sentences. Biggest blocker, biggest opportunity, what to do this week. -->
+  <div class="card">
+    <h2>Summary</h2>
+    <p>The biggest problem is that every product page gives Google two conflicting descriptions of the same product, because the theme and the reviews app each add their own. The biggest opportunity is the search "speckled ceramic mug", where the store already shows up on page 2 of Google and one word added to the product page could move it up. This week, ask the developer to remove the duplicate product data and add a homepage description in the Shopify admin.</p>
+    <!-- Each stat label says where the number came from. -->
+    <div class="stats">
+      <div class="stat"><div class="n">4</div><div class="l">Fixes to make now (this audit)</div></div>
+      <div class="stat"><div class="n">21</div><div class="l">Pages checked (crawler)</div></div>
+      <div class="stat"><div class="n">3</div><div class="l">Searches on page 2 of Google (Search Console, last 3 months)</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">Store-wide issues (crawler)</div></div>
+    </div>
+  </div>
+
+  <!-- 2. Fix now: every high-certainty finding, ordered: blocks indexing, then duplicate or conflicting signals, then high-traffic page titles and copy, then keyword-map gaps, then the rest. -->
+  <div class="card">
+    <div class="card-head">
+      <h2>Fix now</h2>
+      <span class="badge">4 items</span>
+    </div>
+    <p class="small muted">Theme code: a developer changes the theme's Liquid files. Shopify admin: a field or setting the merchant edits. Copy: text someone writes. Effort is one person's working time.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Finding</th><th>Evidence</th><th>Fix type</th><th>Effort</th><th>Owner</th></tr>
+        </thead>
+        <tbody>
+          <!-- REPEAT: one <tr> per finding. Fix type badge: "Theme code" = badge info, "Shopify admin" = badge, "Copy" = badge. -->
+          <tr>
+            <td>Product pages describe the product twice in their hidden product data, with different review counts</td>
+            <td><code>/products/example-mug</code> has 2 Product data blocks: one from the theme, one from the reviews app (crawler, confirmed in page source)</td>
+            <td><span class="badge info">Theme code</span></td>
+            <td>Under half a day</td>
+            <td>Developer</td>
+          </tr>
+          <tr>
+            <td>The homepage has no meta description, so Google picks its own text for the search result</td>
+            <td><code>/</code> has an empty meta description (crawler)</td>
+            <td><span class="badge">Shopify admin</span></td>
+            <td>Under half a day</td>
+            <td>Merchant</td>
+          </tr>
+          <tr>
+            <td>Product links on collection pages go through a longer address, which splits link value between two addresses for each product</td>
+            <td>24 links like <code>/collections/mugs/products/example-mug</code> on <code>/collections/mugs</code> (crawler)</td>
+            <td><span class="badge info">Theme code</span></td>
+            <td>Half to 1 day</td>
+            <td>Developer</td>
+          </tr>
+          <tr>
+            <td>The mugs collection has almost no text for Google to read</td>
+            <td><code>/collections/mugs</code> has about 90 words, counting the menu and footer (crawler)</td>
+            <td><span class="badge">Copy</span></td>
+            <td>Half to 1 day</td>
+            <td>Merchant or copywriter</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <details>
+      <summary>Notes for the developer</summary>
+      <!-- REPEAT: one <li> per Theme code finding, in the same order as the table. -->
+      <ol class="steps">
+        <li>Keep one Product JSON-LD block on the product template and merge the review app's rating into it. Check the result with Google's Rich Results Test.</li>
+        <li>In the product card snippet, link with <code>product.url</code> instead of <code>product.url | within: collection</code>.</li>
+      </ol>
+    </details>
+  </div>
+
+  <!-- 3. Keyword map: every target keyword maps to exactly one page. -->
+  <div class="card">
+    <h2>Keyword map</h2>
+    <p class="small muted">Volume is average monthly searches in the United States and difficulty is the tool's 0 to 100 score, both from Semrush, read 3 November 2026.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Keyword</th><th>Volume</th><th>Difficulty</th><th>Intent</th><th>Target page</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <!-- REPEAT: one <tr> per target keyword. A page that does not exist yet gets <span class="badge att">New page</span>. -->
+          <tr>
+            <td>handmade ceramic mugs</td>
+            <td class="num">1,900</td>
+            <td class="num">31</td>
+            <td>Category</td>
+            <td><code>/collections/mugs</code></td>
+            <td>Use the phrase in the page title, the heading and the first line of the collection text.</td>
+          </tr>
+          <tr>
+            <td>dishwasher safe ceramic mug</td>
+            <td class="num">720</td>
+            <td class="num">18</td>
+            <td>Product</td>
+            <td><code>/products/example-mug</code></td>
+            <td>Add care details to the product description.</td>
+          </tr>
+          <tr>
+            <td>how to care for ceramic mugs</td>
+            <td class="num">320</td>
+            <td class="num">12</td>
+            <td>Information</td>
+            <td><span class="badge att">New page</span></td>
+            <td>Write a care guide on the blog that links to the mugs collection.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. Striking distance: queries at position 11 to 20, each put in one case. -->
+  <div class="card">
+    <h2>Searches on page 2 of Google</h2>
+    <p class="small muted">Search Console, Performance report, last 3 months, average position 11 to 20, sorted by impressions (how often the store appeared in results).</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Search</th><th>Position</th><th>Impressions</th><th>Case</th><th>Next step</th></tr>
+        </thead>
+        <tbody>
+          <!-- REPEAT: one <tr> per query. Case badge: Optimise = badge info, Maxed out = badge, Ignore = badge. -->
+          <tr>
+            <td>speckled ceramic mug</td>
+            <td class="num">12.4</td>
+            <td class="num">2,310</td>
+            <td><span class="badge info">Optimise</span></td>
+            <td>Add "speckled" to the title and first paragraph of <code>/products/example-mug</code>.</td>
+          </tr>
+          <tr>
+            <td>coffee mug</td>
+            <td class="num">18.9</td>
+            <td class="num">8,450</td>
+            <td><span class="badge">Maxed out</span></td>
+            <td>Large retailers hold page 1 for this search. Leave it.</td>
+          </tr>
+          <tr>
+            <td>mug rug pattern</td>
+            <td class="num">14.2</td>
+            <td class="num">640</td>
+            <td><span class="badge">Ignore</span></td>
+            <td>The store does not sell this.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5. Findings by page type: homepage, collections, product pages, blog. -->
+  <div class="card">
+    <h2>Findings by page type</h2>
+    <dl class="rows">
+      <!-- REPEAT: one <dt>/<dd> pair per page type. Start each <dd> with a status badge: ok, warn, bad, or plain "Not checked". -->
+      <dt>Homepage</dt>
+      <dd><span class="badge warn">2 to fix</span> Section headings say "Featured products" instead of what the store sells. 3 of 41 images have no alt text (the short description screen readers and Google use).</dd>
+      <dt>Collections</dt>
+      <dd><span class="badge warn">1 to fix</span> The mugs collection has no text above the products. Add two lines above the grid and move longer text below it.</dd>
+      <dt>Product pages</dt>
+      <dd><span class="badge bad">1 to fix</span> Duplicate product data (see Fix now). Titles and descriptions are within length.</dd>
+      <dt>Blog</dt>
+      <dd><span class="badge">Not checked</span> The store has no blog. Improve product and collection pages before starting one.</dd>
+    </dl>
+  </div>
+
+  <!-- 6. Technical appendix: store-wide crawler results in plain words, plus links to the full crawler output. -->
+  <div class="card">
+    <h2>Technical appendix</h2>
+    <p>The full crawler output is in <a href="seo-checks.md">seo-checks.md</a> and <a href="seo-checks.json">seo-checks.json</a>. The crawler reads pages without running JavaScript, so tags that apps add in the browser can be missing. Each finding above was checked against the live page.</p>
+    <dl class="rows">
+      <!-- REPEAT: one <dt>/<dd> pair per store-wide check. Badge: ok = fine, warn = should fix, att = check by hand, plain = Not checked. -->
+      <dt>Sitemap</dt>
+      <dd><span class="badge ok">Found</span> 312 addresses in 5 sitemaps (crawler).</dd>
+      <dt>robots.txt</dt>
+      <dd><span class="badge ok">Shopify default</span> No page in the sitemap is blocked (crawler).</dd>
+      <dt>Missing-page (404) page</dt>
+      <dd><span class="badge ok">Custom</span> Returns a 404 status with the store's menu (crawler).</dd>
+      <dt>Duplicate addresses</dt>
+      <dd><span class="badge warn">2 found</span> <code>/products/example-mug-1</code> and <code>/collections/mugs-2</code> end in a number, which usually means two items share a name (crawler).</dd>
+      <dt>All-products page</dt>
+      <dd><span class="badge att">Check by hand</span> <code>/collections/all</code> can be found by Google. Check it does not compete with real collections (crawler).</dd>
+      <dt>Speed and Core Web Vitals</dt>
+      <dd><span class="badge">Not checked</span> The crawler does not measure speed. Add field data from PageSpeed Insights or the Search Console Core Web Vitals report.</dd>
+    </dl>
+  </div>
+
+  <!-- 7. Reports to request: the exact exports still missing. If none are missing, say so in one sentence. -->
+  <div class="card">
+    <h2>Reports to request</h2>
+    <ul class="check">
+      <!-- REPEAT: one <li> per missing export. -->
+      <li><div>Search Console, Indexing, Pages: the list of pages Google has not indexed and why. <span class="expect">Used to find pages Google is skipping.</span></div></li>
+      <li><div>Search Console, Performance, last 12 months, Queries and Pages. <span class="expect">Used to compare with the 3 months checked here.</span></div></li>
+    </ul>
+  </div>
+
+  <!-- Fill-in: date, and remove the last sentence (it only belongs in this example). -->
+  <p class="foot">Prepared with the shopify-seo-audit skill on 4 November 2026. Read-only: the audit made no changes to the store. Example report: every number in it is made up.</p>
+
+</div>
+</body>
+</html>

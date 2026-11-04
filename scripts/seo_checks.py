@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Shopify technical + on-page SEO checks for a live store. Stdlib only; Shopify pages are server-rendered, so no browser.
 
-Reads robots.txt and the sitemap index, samples URLs per type (home, products, collections, pages, blogs),
+Reads robots.txt and the sitemap index, samples URLs per type (home, products, collections, pages, blogs incl. posts),
 then checks each page: status, title/meta length, H1 count, canonical, robots meta, Product JSON-LD count,
 product links that go through /collections/, images without alt, visible word count. Store-level: `-N`
 duplicate handles in the sitemap, Disallow rules hitting real pages, custom 404, /collections/all indexability.
@@ -21,6 +21,7 @@ UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
 TITLE_MAX, META_MIN, META_MAX = 60, 150, 160
 WORDS_MIN = 250
 PAUSE = 1.5
+SITEMAP_KINDS = {"products": "products", "collections": "collections", "pages": "pages", "blogs": "blogs", "articles": "blogs"}
 
 
 def get(url, timeout, tries=4):
@@ -45,7 +46,7 @@ class Page(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.title, self.meta, self.canonical, self.robots = "", None, None, ""
         self.h1, self.imgs, self.imgs_no_alt, self.links, self.jsonld = 0, 0, 0, [], []
-        self.words, self._in, self._skip, self._buf = 0, None, 0, ""
+        self.words, self._in, self._skip, self._buf, self._svg = 0, None, 0, "", 0
 
     def handle_starttag(self, tag, a):
         a = dict(a)
@@ -53,7 +54,10 @@ class Page(HTMLParser):
             self._skip += 1
             if tag == "script" and a.get("type") == "application/ld+json":
                 self._in, self._buf = "ld", ""
-        elif tag == "title":
+        elif tag == "svg":
+            self._svg += 1
+        elif tag == "title" and not self._svg and not self.title:
+            # Only the document <title>. Inline SVG icons (e.g. Shopify's payment icons) carry their own <title>.
             self._in = "title"
         elif tag == "meta":
             n = (a.get("name") or "").lower()
@@ -78,6 +82,8 @@ class Page(HTMLParser):
             if self._in == "ld":
                 self.jsonld.append(self._buf)
                 self._in = None
+        elif tag == "svg":
+            self._svg = max(0, self._svg - 1)
         elif tag == "title" and self._in == "title":
             self._in = None
 
@@ -116,7 +122,8 @@ def sitemap_urls(base, timeout):
     if s != 200:
         return out
     for sm in re.findall(r"<loc>([^<]+)</loc>", body):
-        kind = next((k for k in ("products", "collections", "pages", "blogs") if f"sitemap_{k}" in sm), "other")
+        # Shopify now lists blog posts in a separate sitemap_articles_N.xml; they belong with "blogs".
+        kind = next((v for k, v in SITEMAP_KINDS.items() if f"sitemap_{k}" in sm), "other")
         s2, _, b2 = get(sm.replace("&amp;", "&"), timeout)
         if s2 == 200:
             out.setdefault(kind, []).extend(u for u in re.findall(r"<loc>([^<]+)</loc>", b2)

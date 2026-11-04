@@ -4,7 +4,7 @@ Use on every theme rebuild or redesign. It answers the question "will the redesi
 Sources: Shopify Academy SEO path (auditing after a migration or redesign; preserving SEO during site changes) plus agency practice.
 
 ## At discovery (before design)
-1. **URL inventory.** Run `seo_checks.py` at `--per-type 1000` (slow: let it run in the background), or export the sitemap URLs. Add GSC Pages (12 months) and save the **top 50 landing pages by clicks** to `seo/baseline-pages.csv`.
+1. **URL inventory.** Run the crawler (SKILL.md, "Running the crawler") at `--per-type 1000` (slow: let it run in the background), or export the sitemap URLs. Add GSC Pages (12 months) and save the **top 50 landing pages by clicks** to `seo/baseline-pages.csv`.
 2. **Baseline.** Record GSC clicks, impressions and indexed-page count, CWV pass/fail, and the current title/meta on the top 50 pages. Save as `baseline-<date>.md`.
 3. **Handles are frozen.** Any IA change that renames a collection, page or product handle needs a line in `redirect-map.csv` (`old_path,new_path,reason`). Default answer: keep the handle and change only the display name.
 
@@ -16,9 +16,10 @@ Sources: Shopify Academy SEO path (auditing after a migration or redesign; prese
 - No new section adds hard-coded images without alt text.
 
 ## Launch day
-- Import `redirect-map.csv` (Online Store → Navigation → URL redirects). Shopify adds 301s automatically for handle edits made in the admin, but not for handles that changed through IA moves or imports.
+- Import the redirects from `redirect-map.csv` (Content → Menus → URL redirects → Import, using Shopify's sample redirect CSV as the format). When a handle is edited in the admin, Shopify offers a "Create a URL redirect" option (pre-selected on pages); handles changed through IA moves, imports or apps get no redirect unless one is added. A redirect only works when the old URL returns 404: if the old page still loads, the redirect is ignored.
 - Update internal links (menus, sections, blog posts) to point at the **final** URLs, not through redirects.
-- Run `seo_checks.py` on the live store and fix any H1, JSON-LD or canonical regressions the same day.
+- If the old theme had a custom `robots.txt.liquid`, check the new theme has it too: uploading a theme from the Themes page in the admin does not import `robots.txt.liquid`.
+- Run the crawler on the live store and fix any H1, JSON-LD or canonical regressions the same day.
 
 ## After launch
 | When | Check |
