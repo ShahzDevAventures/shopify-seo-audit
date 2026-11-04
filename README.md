@@ -60,6 +60,18 @@ Files, all in `seo/`:
 - `seo-checks.md` and `seo-checks.json`: the crawler's raw results.
 - For redesigns: `baseline-pages.csv`, `baseline-<date>.md` and `redirect-map.csv`.
 
+## Sample report
+
+This is a report for a made-up store, so you can see the output before you run it. [Open the full sample](https://shahzsiddiqui.vercel.app/skills/samples/shopify-seo-audit) in your browser. It is the same file as `references/report-template.html`.
+
+<img src="docs/sample-report.png" width="640" alt="Top of a sample report for a made-up store, styled like the Shopify admin">
+
+The summary from that sample:
+
+> The biggest problem is that every product page gives Google two conflicting descriptions of the same product, because the theme and the reviews app each add their own. The biggest opportunity is the search "speckled ceramic mug", where the store already shows up on page 2 of Google and one word added to the product page could move it up. This week, ask the developer to remove the duplicate product data and add a homepage description in the Shopify admin.
+>
+> 4 fixes to make now · 21 pages checked · 3 searches on page 2 of Google
+
 ## How it works
 
 `scripts/seo_checks.py` reads `robots.txt` and the sitemap, samples a few URLs per type (home, products, collections, pages, blog posts) and checks each page for: HTTP status, title and meta description length, H1 count, canonical, `noindex`, the number of Product JSON-LD blocks, invalid JSON-LD, product links that go through `/collections/<x>/products/<y>`, images without alt text, and thin copy. At store level it checks for a missing sitemap, handles ending in `-N`, sitemap URLs blocked by `robots.txt`, the 404 page, and whether `/collections/all` is indexable. It waits 1.5 seconds between requests and backs off when the store answers HTTP 429.
@@ -90,6 +102,7 @@ Limits:
 - `references/redesign-safeguard.md`: what to record before a theme rebuild and what to check after launch.
 - `references/report-template.html`: the HTML report template, filled with a made-up example.
 - `LICENSE`: the MIT license.
+- `docs/sample-report.png`: the screenshot in this README. It is not part of the skill and is left out of the zip.
 
 ## Author
 
